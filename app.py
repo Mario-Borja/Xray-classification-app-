@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# Archivo: app.py (Login MySQL con Logging a BD y Notificación por Email)
+# Archivo: app.py y Notificación por Email)
 # -----------------------------------------------------------------------------
 import streamlit as st
 import bcrypt
@@ -134,36 +134,39 @@ if not st.session_state['logged_in']:
     st.title("Inicio de Sesión")
     st.info("Por favor, introduce tus credenciales para acceder a la aplicación.")
 
-    with st.form("login_form_mysql"):
-        username = st.text_input("Usuario", key="login_username_mysql")
-        password = st.text_input("Contraseña", type="password", key="login_password_mysql")
+    with st.form("login_form"): # Cambié el nombre del form por simplicidad
+        username = st.text_input("Usuario")
+        password = st.text_input("Contraseña", type="password")
         submitted = st.form_submit_button("Iniciar Sesión")
 
         if submitted:
-            # ¡MODIFICADO! check_credentials ahora devuelve 3 valores y NO cierra la conexión
             is_correct, user_role, user_email = check_credentials(username, password)
 
             if is_correct:
-    
-                # 1. Enviar email de notificación
-                email_success = send_login_email(user_email, username, user_role)
-                if not email_success:
-                    # El warning ya se muestra dentro de send_login_email
-                    pass # Continuar aunque el email falle
-
-                # 2. Actualizar estado de sesión
+                # 1. Actualizar estado de sesión
                 st.session_state['logged_in'] = True
                 st.session_state['username'] = username
                 st.session_state['role'] = user_role
-                st.session_state['email'] = user_email # Guarda el email en sesión
+                st.session_state['email'] = user_email
 
-                # 3. Rerun para mostrar la app principal
-                st.rerun()
+                # 2. Enviar email de notificación
+                send_login_email(user_email, username, user_role)
+
+                # 3. NO es necesario llamar a st.rerun() aquí.
+                # Streamlit lo hará automáticamente al final de esta ejecución.
+                # Para dar feedback inmediato, podemos mostrar un mensaje de éxito.
+                st.success("Inicio de sesión exitoso. Redirigiendo...")
+                # Una pequeña pausa para que el usuario vea el mensaje
+                import time
+                time.sleep(1)
+                st.rerun() # Usamos rerun aquí DESPUÉS del feedback para forzar la recarga a la página principal.
+
             else:
                 st.error("Usuario o contraseña incorrectos.")
 
 # Si el usuario SÍ está logueado, muestra la interfaz principal de la app
 else:
+    # ... (el resto de tu código para el usuario logueado no necesita cambios) ...
     st.sidebar.success(f"Logueado como: {st.session_state['username']} ({st.session_state['role']})")
     if st.sidebar.button("Cerrar Sesión"):
         logout()
@@ -178,4 +181,3 @@ else:
         """
     )
     st.info(f"Usuario: **{st.session_state['username']}** | Rol: **{st.session_state['role']}** | Email: **{st.session_state.get('email', 'N/D')}**")
-
