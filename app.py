@@ -159,7 +159,7 @@ if not st.session_state['logged_in']:
                 # Una pequeña pausa para que el usuario vea el mensaje
                 import time
                 time.sleep(1)
-                st.rerun() # Usamos rerun aquí DESPUÉS del feedback para forzar la recarga a la página principal.
+                st.experimental_rerun() # Usamos rerun aquí DESPUÉS del feedback para forzar la recarga a la página principal.
 
             else:
                 st.error("Usuario o contraseña incorrectos.")
