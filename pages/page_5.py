@@ -361,7 +361,7 @@ Por favor, genera un reporte radiológico para el siguiente caso.
                         st.markdown(f"Para ver los resultados del paciente (funcionalidad de `page_6.py`), necesitarías implementar esa página para que recupere y muestre la información guardada para el paciente `{selected_patient_id_for_report}`.")
                         st.session_state.prediction_results = None; st.session_state.llm_report = None
                         st.session_state.original_image_for_report = None; st.session_state.gradcam_image_for_report = None
-                        st.rerun()
+                        st.experimental_rerun()
     else:
         st.info("Sube una imagen para comenzar.")
 
