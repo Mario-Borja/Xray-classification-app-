@@ -124,7 +124,7 @@ def logout():
     st.session_state['role'] = None
     st.session_state['email'] = None # Resetea email también
     st.info("Has cerrado sesión.")
-    st.rerun()
+    st.experimental_rerun()
 
 
 # --- Interfaz de Usuario ---
