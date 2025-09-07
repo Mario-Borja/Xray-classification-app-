@@ -59,7 +59,7 @@ client = None
 try:
     # Intenta leer la clave API desde los Secrets de Streamlit
     # Este es el método recomendado y seguro para el despliegue
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    client = OpenAI(api_key=st.secrets["openai"]["api_key"])
     # st.sidebar.info("Cliente OpenAI inicializado correctamente.") # Opcional
 
 except Exception as e:
