@@ -52,53 +52,25 @@ ACTUAL_LABELS = [
 ]
 PATIENT_ID_COL = 'PatientId' 
 
-# --- MODIFICACIÓN: Configuración del Cliente OpenAI ---
-# ¡¡¡ADVERTENCIA DE SEGURIDAD!!!
-# Poner tu clave API directamente en el código es riesgoso si compartes el código o lo subes a un repositorio.
-# Para pruebas locales, puedes reemplazar "sk-TU_CLAVE_API_SECRETA_AQUI" con tu clave real.
-# Para producción, usa variables de entorno o los Secrets de Streamlit Cloud.
 
-OPENAI_API_KEY_PLACEHOLDER = "sk-TU_CLAVE_API_SECRETA_AQUI"
-OPENAI_API_KEY_HARDCODED = "sk-Pa28ta3mfTOfAnhXCDDoAlzxnH5_LE-pCwSlPDccL5T3BlbkFJj2Qwr83HP_DJ4QOspfOdSuKpp5HpNO5VtH3LwVma4A"  # <--- TU CLAVE REAL ESTÁ AQUÍ (según tu mensaje)
+# --- MODIFICACIÓN: Configuración Segura del Cliente OpenAI ---
 
 client = None
+try:
+    # Intenta leer la clave API desde los Secrets de Streamlit
+    # Este es el método recomendado y seguro para el despliegue
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    # st.sidebar.info("Cliente OpenAI inicializado correctamente.") # Opcional
 
-# 1. Intentar con la clave hardcodeada SI ES DIFERENTE DEL PLACEHOLDER
-if OPENAI_API_KEY_HARDCODED != OPENAI_API_KEY_PLACEHOLDER and OPENAI_API_KEY_HARDCODED.startswith("sk-"):
-    try:
-        client = OpenAI(api_key=OPENAI_API_KEY_HARDCODED)
-        st.sidebar.info("Cliente OpenAI inicializado con clave API hardcodeada (SOLO PARA PRUEBAS).")
-    except Exception as e:
-        st.sidebar.error(f"Error OpenAI Client con clave hardcodeada: {e}")
-        client = None # Asegurar que client es None si falla
+except Exception as e:
+    # Muestra una advertencia clara si no se pueden configurar los secrets
+    st.sidebar.error("Error al configurar la API de OpenAI.")
+    st.sidebar.warning(
+        "Por favor, asegúrate de haber configurado tu clave OPENAI_API_KEY "
+        "en la sección de 'Secrets' de tu aplicación en Streamlit Cloud."
+    )
+    client = None # Asegurarse de que el cliente es None si falla
 
-# 2. Si la clave hardcodeada no se usó o falló, intentar con st.secrets (para Streamlit Cloud)
-if client is None:
-    try:
-        # Intentar leer desde st.secrets si está disponible
-        # Esto no dará error si st.secrets no existe, pero .get() devolverá None si la clave no está
-        api_key_from_secrets = st.secrets.get("OPENAI_API_KEY")
-        if api_key_from_secrets:
-            client = OpenAI(api_key=api_key_from_secrets)
-            # st.sidebar.info("Cliente OpenAI inicializado con st.secrets.") # Opcional
-    except AttributeError: # st.secrets no existe (ej. localmente sin configurar secrets.toml)
-        pass # Continuar al siguiente método
-    except Exception as e: # Otro error al inicializar con secrets
-        st.sidebar.warning(f"Error al intentar usar st.secrets para OpenAI: {e}")
-        client = None
-
-# 3. Si aún no hay cliente, intentar con variable de entorno (último recurso antes de advertir)
-if client is None:
-    try:
-        client = OpenAI() # Intenta leer desde la variable de entorno OPENAI_API_KEY automáticamente
-        # st.sidebar.info("Cliente OpenAI inicializado con variable de entorno.") # Opcional
-    except Exception as e: # Captura errores si OpenAI() falla (ej. variable no seteada y no hay clave por defecto)
-        # No mostramos error aquí todavía, lo haremos después si client sigue siendo None
-        pass
-
-# 4. Advertencia final si client sigue siendo None
-if client is None:
-    st.sidebar.warning("API Key de OpenAI no configurada correctamente (ni hardcodeada, ni en st.secrets, ni como variable de entorno). La generación de reportes no funcionará.")
 # --- FIN MODIFICACIÓN ---
 
 
