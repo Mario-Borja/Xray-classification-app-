@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Archivo: pages/page_4.py
-# Contenido: Exploración del Dataset de Rayos X y Análisis de Desbalance
+# Contenido: Exploración del Dataset de Rayos X y Análisis de Desbalance.
 # -----------------------------------------------------------------------------
 import streamlit as st
 import pandas as pd
