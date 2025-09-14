@@ -14,7 +14,7 @@ if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
 
 # --- Configuración de Página ---
 st.set_page_config(page_title="Mis Resultados Médicos", layout="wide")
-st.markdown("# Página 6: Mis Resultados de Radiografía de Tórax 📄")
+st.markdown("# Mis Resultados de Radiografía de Tórax 📄")
 st.sidebar.header("Mis Resultados")
 
 # --- Lógica para Mostrar Resultados ---

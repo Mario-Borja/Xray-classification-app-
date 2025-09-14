@@ -29,7 +29,7 @@ if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
 
 # --- Configuración y Constantes ---
 st.set_page_config(page_title="Diagnóstico Rayos X", layout="wide") # Llamar solo una vez
-st.markdown("# Página 5: Clasificador de Patologías Pulmonares con Asistencia de IA 🩺")
+st.markdown("# Clasificador de Patologías Pulmonares con Asistencia de IA 🩺")
 st.sidebar.header("Predicción con Rayos X")
 
 # Definir rutas

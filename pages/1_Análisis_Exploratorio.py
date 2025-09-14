@@ -18,7 +18,7 @@ if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
 
 # --- Configuración y Constantes ---
 st.set_page_config(page_title="Exploración Rayos X", layout="wide")
-st.markdown("# Página 4: Exploración del Dataset y Desbalance de Clases 📊")
+st.markdown("# Exploración del Dataset y Desbalance de Clases 📊")
 st.sidebar.header("Exploración Dataset")
 
 # Definir rutas relativas al directorio principal de la app (donde está app.py)
