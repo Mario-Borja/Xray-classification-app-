@@ -3,3 +3,5 @@ _pycache_/
 .streamlit/secrets.toml
 data/*.zip
 ._*
+.notebooks/public_tests.py
+.notebooks/validate_auc_xray.ipynb
